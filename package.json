@@ -1,0 +1,24 @@
+{
+  "name": "dead-link",
+  "version": "1.0.0",
+  "description": "Find Dead Links",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ghmeier/dead-link.git"
+  },
+  "author": "Garret Meier <meier.garret@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ghmeier/dead-link/issues"
+  },
+  "homepage": "https://github.com/ghmeier/dead-link#readme",
+  "dependencies": {
+    "linkscrape": "^1.0.0",
+    "normalize-url": "^1.6.0",
+    "request": "^2.74.0"
+  }
+}
