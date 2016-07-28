@@ -24,7 +24,7 @@ deadLink.check('https://google.com', {
   * `callbacks.failure(uri)` is called whenever the uri is broken
   * `callbacks.finished(links)` is called whenever links are retrieved from the initial page.
 
-Check out [example.js](https://github.com/ghmeier/dead-link/example.js) to see usage.
+Check out [example.js](https://github.com/ghmeier/dead-link/blob/master/example.js) to see usage.
 
 # Why
 I see too many sites with links that are broken. Use this to make something that checks your site automagically. Please. 
