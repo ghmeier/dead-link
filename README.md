@@ -2,7 +2,6 @@
 A package for checking web pages for dead links.
 
 # Usage
----
 1. Install.
 `npm install dead-link --save`
 
@@ -18,7 +17,6 @@ deadLink.check('https://google.com', {
 ```
 
 # Definition
----
 * `.check(link, callbacks)`
   * Gets all hrefs at the `link` page, and visits them really quickly.
   * `callbacks` is an optional value containing functions that are triggered throughout the proccess
@@ -29,7 +27,6 @@ deadLink.check('https://google.com', {
 Check out [example.js](https://github.com/ghmeier/dead-link/example.js) to see usage.
 
 # Why
----
 I see too many sites with links that are broken. Use this to make something that checks your site automagically. Please. 
 
 No more dead links.
