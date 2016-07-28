@@ -19,7 +19,9 @@
   "homepage": "https://github.com/ghmeier/dead-link#readme",
   "dependencies": {
     "assert-exists": "0.0.1",
+    "istanbul": "^0.4.4",
     "linkscrape": "^1.0.0",
-    "normalize-url": "^1.6.0"
+    "normalize-url": "^1.6.0",
+    "tape": "^4.6.0"
   }
 }
