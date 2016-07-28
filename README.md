@@ -28,5 +28,5 @@ Check out [example.js](https://github.com/ghmeier/dead-link/blob/master/example.
 
 # Why
 I see too many sites with links that are broken. Use this to make something that checks your site automagically. Please. 
-
+---
 No more dead links.
