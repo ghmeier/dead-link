@@ -1,46 +1,89 @@
-var request = require('request');
-var linkscrape = require('linkscrape');
-var http = require('http'),
+var linkscrape = require('linkscrape'),
+    a = require('assert-exists'),
+    http = require('http'),
     url = require('url');
+var eMsg = a.msg('DeadLink');
 
-var regex = /^(?:ftp|http|https):\/\/(?:[\w\.\-\+]+:{0,1}[\w\.\-\+]*@)?(?:[a-z0-9\-\.]+)(?::[0-9]+)?(?:\/|\/(?:[\w#!:\.\?\+=&%@!\-\/\(\)]+)|\?(?:[\w#!:\.\?\+=&%@!\-\/\(\)]+))?$/i
-var val = 0;
+module.exports.check = deadLink;
+module.exports.validate = validate;
+module.exports.visit = visit;
+module.exports.urlExists = urlExists;
 
-function deadLink(link, cb) {
-    request.get(link, function(err, res, body) {
-        linkscrape(link, body, function(links) {
-            var successes = 0;
-            var fails = 0;
-            var results = [];
-            for (var i=0; i<links.length; i++){
-                var cur = links[i].href;
-                if (cur && cur.match(regex)) {
-                    var parsed = url.parse(cur);
-                    results.push(parsed);
+function deadLink(link, cbs) {
+    var parsedLink = url.parse(link);
+    a.exists(parsedLink.hostname, eMsg('hostname'));
+    if (!cbs) {
+        cbs = {};
+    }
+
+    var options = {
+        method: 'GET',
+        hostname: parsedLink.hostname,
+        path: parsedLink.pathname,
+        port: 80
+    };
+    var req = http.request(options, function(r) {
+        body = '';
+        r.on('data', function(d) {
+            body += d;
+        });
+        r.on('end', function() {
+            linkscrape(link, body, function(links) {
+                visit(validate(links), cbs.success, cbs.failure);
+                if (typeof cbs.finished === 'function') {
+                    cbs.finished(links);
                 }
-            }
-
-            for (var i=0; i<results.length; i++) {
-                var cur = results[i];
-                urlExists(cur, cb);
-            }
+            });
         });
     });
+    req.end();
 }
 
-function urlExists(Url) {
+function validate(links) {
+    var results = [];
+    for (var i=0; i<links.length; i++){
+        if (links[i].href) {
+            var cur = url.parse(links[i].href);
+            if (!cur.hostname){
+                continue;
+            }
+            results.push(cur);
+        }
+    }
+    return results;
+}
+
+function visit(links, success, failure) {
+    for (var i=0; i<links.length; i++) {
+        var cur = links[i];
+        urlExists(cur, function(exists, uri) {
+            if (!exists) {
+                if (typeof failure === 'function') {
+                    failure(uri);
+                }
+            } else {
+                if (typeof success === 'function') {
+                    success(uri);
+                }
+            }
+        });
+    }
+}
+
+function urlExists(uri, cb) {
     var options = {
         method: 'HEAD',
-        host: Url.host,
+        hostname: uri.hostname,
         port: 80,
-        path: Url.pathname
+        path: uri.pathname
     };
     var req = http.request(options, function (r) {
-        req.destroy();
+        r.destroy();
+        cb(true, uri);
+
     });
     req.on('error', function(err) {
-        val++;
-        console.log(Url.href);
+        cb(false, uri);
     });
     req.end();
     return;

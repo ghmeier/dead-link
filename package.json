@@ -4,7 +4,8 @@
   "description": "Find Dead Links",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "npm run test-cover",
+    "test-cover": "istanbul cover --report html --print detail -- test.js"
   },
   "repository": {
     "type": "git",
@@ -17,8 +18,8 @@
   },
   "homepage": "https://github.com/ghmeier/dead-link#readme",
   "dependencies": {
+    "assert-exists": "0.0.1",
     "linkscrape": "^1.0.0",
-    "normalize-url": "^1.6.0",
-    "request": "^2.74.0"
+    "normalize-url": "^1.6.0"
   }
 }
